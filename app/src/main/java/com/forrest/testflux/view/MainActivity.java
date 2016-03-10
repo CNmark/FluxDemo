@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (id == R.id.message_button) {
             if (vMessageEditor.getText() != null) {
                 mainActionsCreator.setText(vMessageEditor.getText().toString());
-                vMessageEditor.setText(null);
+               // vMessageEditor.setText(null);
             }
         }else if(id==R.id.btn_next){
             Intent intent=new Intent(this,SecondActivity.class);
@@ -85,7 +85,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onEventMainThread(Object event) {
 
         if (event instanceof MainStore.MainStoreEvent) {
-            render(store);
+            if(MainAction.ACTION_NEW_MESSAGE.equals(((MainStore.MainStoreEvent) event).getOperationType())){
+                render(store);
+            }
+
         }else if(event instanceof SecondStore.SecondStoreEvent){
             Toast.makeText(this, "主界面收到消息了", Toast.LENGTH_LONG).show();
         }
