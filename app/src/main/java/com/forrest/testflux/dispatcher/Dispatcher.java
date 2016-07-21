@@ -1,23 +1,20 @@
 package com.forrest.testflux.dispatcher;
 
 
-
-import android.content.Context;
-
-import com.forrest.testflux.action.base.Action;
-import com.forrest.testflux.store.Store;
-
-import java.util.ArrayList;
-import java.util.List;
-
+import com.forrest.testflux.flux.action.base.Action;
+import com.forrest.testflux.flux.store.Store;
 
 /**
  * Flux的Dispatcher模块
- * Created by ntop on 18/12/15.
+ * Forrest
  */
 public class Dispatcher {
+
+    public final String TAG=Dispatcher.class.getSimpleName();
+
     private static Dispatcher instance;
-    private final List<Store> stores = new ArrayList<>();
+
+    private volatile Store currentStore;
 
     public static Dispatcher get() {
         if (instance == null) {
@@ -28,25 +25,43 @@ public class Dispatcher {
 
     Dispatcher() {}
 
-    public void register(Context context,final Store store) {
-        if (!stores.contains(store)) {
-            store.register(context);
-            stores.add(store);
+    public void register(Object subscriber,final Store store) {
+
+        if(store!=null){
+            store.register(subscriber);
         }
+        this.currentStore=store;
     }
 
-    public void unregister(Context context,final Store store) {
-        store.unRegister(context);
-        stores.remove(store);
+    public void unregister(Object subscriber,final Store store) {
+        if(store!=null){
+            store.unRegister(subscriber);
+        }
+        if(currentStore==store){
+            currentStore=null;
+        }
     }
 
     public void dispatch(Action action) {
         post(action);
     }
 
-    private void post(final Action action) {
-        for (Store store : stores) {
-            store.onAction(action);
+    /**
+     * 用于防止跳转到其他页面，再回到当前页面的时候，currentStore不一致
+     * @param subscriber
+     * @param store
+     */
+    public void reCheckStore(Object subscriber,final Store store){
+        if(currentStore!=store){
+            register(subscriber,store);
         }
+    }
+
+
+    private void post(final Action action) {
+        if(currentStore!=null){
+            currentStore.onAction(action);
+        }
+
     }
 }

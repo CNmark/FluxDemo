@@ -1,16 +1,12 @@
-package com.forrest.testflux.store;
+package com.forrest.testflux.flux.store;
 
 
-import com.forrest.testflux.action.MainAction;
-import com.forrest.testflux.action.base.Action;
+import com.forrest.testflux.flux.action.MainAction;
+import com.forrest.testflux.flux.action.base.Action;
 import com.forrest.testflux.model.Message;
 
-/**
- * MessageStore类主要用来维护MainActivity的UI状态
- * Created by ntop on 18/12/15.
- */
+
 public class MainStore extends Store {
-    private static MainStore singleton;
     private Message mMessage = new Message();
 
     public MainStore() {
@@ -34,6 +30,10 @@ public class MainStore extends Store {
         emitStoreChange(operationType);
     }
 
+    @Override
+    public void onRelease() {
+
+    }
 
 
     @Override

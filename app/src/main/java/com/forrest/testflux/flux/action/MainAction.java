@@ -1,8 +1,8 @@
-package com.forrest.testflux.action;
+package com.forrest.testflux.flux.action;
 
 
-import com.forrest.testflux.action.base.Action;
-import com.forrest.testflux.action.base.IActionEntityBuilder;
+import com.forrest.testflux.flux.action.base.Action;
+import com.forrest.testflux.flux.action.base.IActionEntityBuilder;
 
 /**
  * Created by ntop on 18/12/15.

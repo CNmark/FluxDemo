@@ -1,4 +1,4 @@
-package com.forrest.testflux.action.base;
+package com.forrest.testflux.flux.action.base;
 
 
 public abstract class Action<T extends IActionEntityBuilder> {

@@ -1,4 +1,4 @@
-package com.forrest.testflux.action.base;
+package com.forrest.testflux.flux.action.base;
 
 /**
  * Created by Forrest on 2016/3/7.

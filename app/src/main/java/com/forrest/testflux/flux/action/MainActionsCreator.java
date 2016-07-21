@@ -1,7 +1,7 @@
-package com.forrest.testflux.action;
+package com.forrest.testflux.flux.action;
 
 
-import com.forrest.testflux.action.base.*;
+import com.forrest.testflux.flux.action.base.*;
 import com.forrest.testflux.dispatcher.Dispatcher;
 
 

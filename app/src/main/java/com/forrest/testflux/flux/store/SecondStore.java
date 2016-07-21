@@ -1,8 +1,8 @@
-package com.forrest.testflux.store;
+package com.forrest.testflux.flux.store;
 
 
-import com.forrest.testflux.action.SecondAction;
-import com.forrest.testflux.action.base.Action;
+import com.forrest.testflux.flux.action.SecondAction;
+import com.forrest.testflux.flux.action.base.Action;
 
 /**
  * Created by forrest on 16/2/29.
@@ -25,6 +25,11 @@ public class SecondStore extends Store  {
         }
 
         emitStoreChange(type);
+
+    }
+
+    @Override
+    public void onRelease() {
 
     }
 

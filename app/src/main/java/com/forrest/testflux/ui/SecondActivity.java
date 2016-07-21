@@ -1,13 +1,13 @@
-package com.forrest.testflux.view;
+package com.forrest.testflux.ui;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
 import com.forrest.testflux.R;
-import com.forrest.testflux.action.SecondActionCreator;
+import com.forrest.testflux.flux.action.SecondActionCreator;
 import com.forrest.testflux.dispatcher.Dispatcher;
-import com.forrest.testflux.store.SecondStore;
+import com.forrest.testflux.flux.store.SecondStore;
 
 import org.greenrobot.eventbus.Subscribe;
 

@@ -1,4 +1,4 @@
-package com.forrest.testflux.action.base;
+package com.forrest.testflux.flux.action.base;
 
 
 import com.forrest.testflux.dispatcher.Dispatcher;

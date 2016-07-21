@@ -1,10 +1,8 @@
-package com.forrest.testflux.view;
+package com.forrest.testflux.ui;
 
 import android.content.Intent;
-import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -12,21 +10,22 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.forrest.testflux.R;
-import com.forrest.testflux.action.MainAction;
-import com.forrest.testflux.action.MainActionsCreator;
+import com.forrest.testflux.flux.action.MainAction;
+import com.forrest.testflux.flux.action.MainActionsCreator;
 import com.forrest.testflux.dispatcher.Dispatcher;
-import com.forrest.testflux.store.MainStore;
-import com.forrest.testflux.store.SecondStore;
+import com.forrest.testflux.flux.store.MainStore;
+import com.forrest.testflux.flux.store.SecondStore;
+import com.forrest.testflux.flux.store.Store;
+import com.forrest.testflux.ui.base.BaseFluxActivity;
 
 import org.greenrobot.eventbus.Subscribe;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener{
+public class MainActivity extends BaseFluxActivity implements View.OnClickListener{
 
     private EditText vMessageEditor;
     private Button vMessageButton;
     private TextView vMessageView;
 
-    private Dispatcher dispatcher;
     private MainStore store;
     MainActionsCreator mainActionsCreator;
 
@@ -34,21 +33,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        initDependencies();
         setupView();
+        initDependencies();
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        dispatcher.unregister(this, store);
-    }
+
 
     private void initDependencies() {
-        dispatcher = Dispatcher.get();
         mainActionsCreator=new MainActionsCreator(dispatcher);
         store = new MainStore();
-        dispatcher.register(this, store);
 
     }
 
@@ -81,9 +74,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         vMessageView.setText(store.getMessage());
     }
 
-    @Subscribe
-    public void onEventMainThread(Object event) {
 
+    @Override
+    public void onViewUpdate(Object event) {
         if (event instanceof MainStore.MainStoreEvent) {
             if(MainAction.ACTION_NEW_MESSAGE.equals(((MainStore.MainStoreEvent) event).getOperationType())){
                 render(store);
@@ -92,6 +85,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }else if(event instanceof SecondStore.SecondStoreEvent){
             Toast.makeText(this, "主界面收到消息了", Toast.LENGTH_LONG).show();
         }
+    }
 
+    @Override
+    public Store initStore() {
+        return store;
     }
 }

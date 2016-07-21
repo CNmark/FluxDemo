@@ -1,11 +1,10 @@
-package com.forrest.testflux.action.base;
+package com.forrest.testflux.flux.action.base;
 
 
 import com.forrest.testflux.dispatcher.Dispatcher;
 
 /**
  * Flux的ActionCreator模块
- * Created by ntop on 18/12/15.
  */
 public class ActionsCreator {
 

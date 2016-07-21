@@ -1,8 +1,6 @@
 package com.forrest.testflux.model;
 
-/**
- * Created by ntop on 18/12/15.
- */
+
 public class Message {
     private String mText;
 
