@@ -31,12 +31,6 @@ public class MainStore extends Store {
     }
 
     @Override
-    public void onRelease() {
-
-    }
-
-
-    @Override
     public StoreChangeEvent changeEvent(String operationType) {
         return new MainStoreEvent(operationType);
     }

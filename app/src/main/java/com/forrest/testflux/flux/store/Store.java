@@ -72,12 +72,6 @@ public abstract class Store {
 
 
     /**
-     * 基类覆盖该方法可以在activity或者fragment的onstop回调，
-     * 用于关闭一些无用的耗内存操作
-     */
-    public abstract   void onRelease();
-
-    /**
      * 基类覆盖该方法可以在activity或者fragment的onstart回调
      */
     public void onStart(){

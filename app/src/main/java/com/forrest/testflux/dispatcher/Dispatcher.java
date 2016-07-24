@@ -46,16 +46,6 @@ public class Dispatcher {
         post(action);
     }
 
-    /**
-     * 用于防止跳转到其他页面，再回到当前页面的时候，currentStore不一致
-     * @param subscriber
-     * @param store
-     */
-    public void reCheckStore(Object subscriber,final Store store){
-        if(currentStore!=store){
-            register(subscriber,store);
-        }
-    }
 
 
     private void post(final Action action) {

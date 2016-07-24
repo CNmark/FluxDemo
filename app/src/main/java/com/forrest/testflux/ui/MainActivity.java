@@ -1,30 +1,26 @@
 package com.forrest.testflux.ui;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.forrest.testflux.R;
 import com.forrest.testflux.flux.action.MainAction;
 import com.forrest.testflux.flux.action.MainActionsCreator;
-import com.forrest.testflux.dispatcher.Dispatcher;
 import com.forrest.testflux.flux.store.MainStore;
-import com.forrest.testflux.flux.store.SecondStore;
 import com.forrest.testflux.flux.store.Store;
 import com.forrest.testflux.ui.base.BaseFluxActivity;
 
-import org.greenrobot.eventbus.Subscribe;
+import butterknife.BindView;
+import butterknife.OnClick;
 
-public class MainActivity extends BaseFluxActivity implements View.OnClickListener{
+public class MainActivity extends BaseFluxActivity {
 
-    private EditText vMessageEditor;
-    private Button vMessageButton;
-    private TextView vMessageView;
+    @BindView(R.id.et_text) EditText editText;
+    @BindView(R.id.tv_text) TextView textView;
 
     private MainStore store;
     MainActionsCreator mainActionsCreator;
@@ -33,47 +29,29 @@ public class MainActivity extends BaseFluxActivity implements View.OnClickListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        setupView();
         initDependencies();
     }
-
-
 
     private void initDependencies() {
         mainActionsCreator=new MainActionsCreator(dispatcher);
         store = new MainStore();
-
     }
 
-    private void setupView() {
-        vMessageEditor = (EditText) findViewById(R.id.message_editor);
-        vMessageView = (TextView) findViewById(R.id.message_view);
-        vMessageButton = (Button) findViewById(R.id.message_button);
-        vMessageButton.setOnClickListener(this);
-        findViewById(R.id.btn_next).setOnClickListener(this);
-    }
-
-
-    @Override
-    public void onClick(View view) {
-
-        int id = view.getId();
-        if (id == R.id.message_button) {
-            if (vMessageEditor.getText() != null) {
-                mainActionsCreator.setText(vMessageEditor.getText().toString());
-               // vMessageEditor.setText(null);
-            }
-        }else if(id==R.id.btn_next){
-            Intent intent=new Intent(this,SecondActivity.class);
-            startActivity(intent);
+    @OnClick(R.id.btn_send) void onSend() {
+        if (editText.getText() != null) {
+            mainActionsCreator.setText(editText.getText().toString());
         }
+    }
+
+    @OnClick(R.id.btn_next) void onNext() {
+        Intent intent=new Intent(this,SecondActivity.class);
+        startActivity(intent);
     }
 
 
     private void render(MainStore store) {
-        vMessageView.setText(store.getMessage());
+        textView.setText(store.getMessage());
     }
-
 
     @Override
     public void onViewUpdate(Object event) {
@@ -81,9 +59,6 @@ public class MainActivity extends BaseFluxActivity implements View.OnClickListen
             if(MainAction.ACTION_NEW_MESSAGE.equals(((MainStore.MainStoreEvent) event).getOperationType())){
                 render(store);
             }
-
-        }else if(event instanceof SecondStore.SecondStoreEvent){
-            Toast.makeText(this, "主界面收到消息了", Toast.LENGTH_LONG).show();
         }
     }
 

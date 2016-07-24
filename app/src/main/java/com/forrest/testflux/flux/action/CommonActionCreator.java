@@ -19,4 +19,8 @@ public class CommonActionCreator extends ActionsCreatorFactory {
         actionsCreator.sendMessage(new CommonAction.CommonActionEntity().buildWithType(CommonAction.TYPE_REFRESH));
     }
 
+    public void deleteData(){
+        actionsCreator.sendMessage(new CommonAction.CommonActionEntity().buildWithType(CommonAction.TYPE_DELETE));
+    }
+
 }

@@ -1,59 +1,73 @@
 package com.forrest.testflux.ui;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.forrest.testflux.R;
-import com.forrest.testflux.flux.action.SecondActionCreator;
+import com.forrest.testflux.flux.action.CommonAction;
+import com.forrest.testflux.flux.action.CommonActionCreator;
 import com.forrest.testflux.dispatcher.Dispatcher;
 import com.forrest.testflux.flux.store.SecondStore;
+import com.forrest.testflux.flux.store.Store;
+import com.forrest.testflux.ui.base.BaseFluxActivity;
 
-import org.greenrobot.eventbus.Subscribe;
+import butterknife.BindView;
+import butterknife.OnClick;
 
-public class SecondActivity extends AppCompatActivity implements View.OnClickListener{
+public class SecondActivity extends BaseFluxActivity {
 
-    private Dispatcher dispatcher;
+    @BindView(R.id.btn_refresh)
+    Button btn_refresh;
 
-    SecondActionCreator secondActionCreator;
+    @BindView(R.id.progressBar)
+    ProgressBar progressBar;
 
+    private CommonActionCreator commonActionCreator;
     SecondStore secondStore;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_second);
         initDependencies();
-        setupView();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        dispatcher.unregister(this, secondStore);
     }
 
     private void initDependencies() {
-        dispatcher = Dispatcher.get();
-        secondActionCreator=new SecondActionCreator(dispatcher);
+        commonActionCreator=new CommonActionCreator(dispatcher);
         secondStore=new SecondStore();
         dispatcher.register(this, secondStore);
     }
 
-    private void setupView() {
-        findViewById(R.id.btn_click).setOnClickListener(this);
+    @OnClick(R.id.btn_refresh) void onRefresh() {
+        btn_refresh.setText("refreshing...");
+        progressBar.setVisibility(View.VISIBLE);
+        commonActionCreator.refreshData();
     }
 
-    @Subscribe
-    public void onEventMainThread(Object event) {
-
+    @OnClick(R.id.btn_delete) void onDelete() {
+        commonActionCreator.deleteData();
     }
 
 
     @Override
-    public void onClick(View view) {
-        int id = view.getId();
-        if (id == R.id.btn_click) {
-            secondActionCreator.update();
+    public void onViewUpdate(Object event) {
+        if(event instanceof Store.StoreChangeEvent){
+            SecondStore.SecondStoreEvent secondStoreEvent= (SecondStore.SecondStoreEvent) event;
+            if(secondStoreEvent.getOperationType().equals(CommonAction.TYPE_REFRESH)){
+                btn_refresh.setText("refresh complete");
+                progressBar.setVisibility(View.GONE);
+            }else if(secondStoreEvent.getOperationType().equals(CommonAction.TYPE_DELETE)){
+                Toast.makeText(this,"Delete..",Toast.LENGTH_SHORT).show();
+            }
         }
+    }
+
+    @Override
+    public Store initStore() {
+        return secondStore;
     }
 }

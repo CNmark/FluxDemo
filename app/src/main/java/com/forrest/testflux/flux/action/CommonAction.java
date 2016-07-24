@@ -12,8 +12,8 @@ public class CommonAction extends Action<CommonAction.CommonActionEntity> {
 
     /***公共使用的刷新操作**/
     public static final String TYPE_REFRESH = "TYPE_REFRESH";
-    /***公共使用的更新操作**/
-    public static final String TYPE_UPDATE= "TYPE_UPDATE";
+    /***公共使用的删除操作**/
+    public static final String TYPE_DELETE= "TYPE_DELETE";
 
     public CommonAction(String type, CommonActionEntity data) {
         super(type, data);
